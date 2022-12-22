@@ -11,8 +11,9 @@ import requests
 from ..types import Result, ResultList
 from .multithreading import make_multithreaded
 
-
-URL_TEMPLATE = "https://commoncrawl.s3.amazonaws.com/{filename}"
+# https://data.commoncrawl.org/ 
+# URL_TEMPLATE = f"https://commoncrawl.s3.amazonaws.com/{filename}"
+URL_TEMPLATE = "https://data.commoncrawl.org/{filename}"
 
 
 def download_single_result(result: Result) -> Result:
