@@ -28,12 +28,15 @@ def search_single_index(index: str, url: str) -> ResultList:
     results: ResultList = []
 
     url = URL_TEMPLATE.format(index=index, url=url)
-    response = requests.get(url)
+    response = requests.get(url, timeout=600)
 
     if response.status_code == 200:
         results = [
             json.loads(result) for result in response.content.splitlines()
         ]
+    else:
+        # response.status_code == 504:
+        print(f"ERROR {response.status_code} {url}")
 
     return results
 
