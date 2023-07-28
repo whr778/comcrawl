@@ -14,6 +14,8 @@ URL_TEMPLATE = ("https://index.commoncrawl.org/"
                 "CC-MAIN-{index}-index?url={url}&output=json")
 
 
+retries = 10
+
 def search_single_index(index: str, url: str) -> ResultList:
     """Searches specific Common Crawl Index for given URL pattern.
 
@@ -26,17 +28,23 @@ def search_single_index(index: str, url: str) -> ResultList:
 
     """
     results: ResultList = []
-
     url = URL_TEMPLATE.format(index=index, url=url)
-    response = requests.get(url, timeout=600)
 
-    if response.status_code == 200:
-        results = [
-            json.loads(result) for result in response.content.splitlines()
-        ]
-    else:
-        # response.status_code == 504:
-        print(f"ERROR {response.status_code} {url}")
+    for i in range(retries):
+        response = requests.get(url, timeout=600)
+
+        if response.status_code == 200:
+            results = [
+                json.loads(result) for result in response.content.splitlines()
+            ]
+            break;
+        elif response.status_code == 504:
+            # response.status_code == 504:
+            print(f"ERROR {response.status_code} {url}... retry {i}")
+        else:
+            # response.status_code == 504:
+            print(f"ERROR {response.status_code} {url}... retry {i}")
+            break;
 
     return results
 

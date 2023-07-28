@@ -16,6 +16,8 @@ from .multithreading import make_multithreaded
 URL_TEMPLATE = "https://data.commoncrawl.org/{filename}"
 # https://data.commoncrawl.org/crawl-data/CC-MAIN-2023-14/index.html
 
+retries = 10
+
 def download_single_result(result: Result) -> Result:
     """Downloads HTML for single search result.
 
